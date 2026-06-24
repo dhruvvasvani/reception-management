@@ -1,0 +1,339 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+:root {
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --bg-color: #0d0e12;
+  --text-color: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --badge-bg: rgba(255, 255, 255, 0.08);
+  --badge-border: rgba(255, 255, 255, 0.15);
+  --badge-hover: rgba(255, 255, 255, 0.15);
+  --badge-text: #cbd5e1;
+  --input-bg: rgba(255, 255, 255, 0.05);
+  --input-border: rgba(255, 255, 255, 0.12);
+  --hero-text-grad: linear-gradient(135deg, #ffffff 60%, #a855f7 100%);
+  --grad-1: rgba(99, 102, 241, 0.15);
+  --grad-2: rgba(168, 85, 247, 0.12);
+  --text-muted: #94a3b8;
+  --panel-bg: rgba(0,0,0,0.2);
+  --queue-border: rgba(255,255,255,0.1);
+  --queue-active: rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="light"] {
+  --bg-color: #f8fafc;
+  --text-color: #0f172a;
+  --glass-bg: rgba(255, 255, 255, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --badge-bg: rgba(0, 0, 0, 0.05);
+  --badge-border: rgba(0, 0, 0, 0.1);
+  --badge-hover: rgba(0, 0, 0, 0.1);
+  --badge-text: #475569;
+  --input-bg: rgba(255, 255, 255, 0.8);
+  --input-border: rgba(0, 0, 0, 0.15);
+  --hero-text-grad: linear-gradient(135deg, #0f172a 60%, #7e22ce 100%);
+  --grad-1: rgba(99, 102, 241, 0.2);
+  --grad-2: rgba(168, 85, 247, 0.15);
+  --text-muted: #64748b;
+  --panel-bg: rgba(255,255,255,0.4);
+  --queue-border: rgba(0,0,0,0.05);
+  --queue-active: rgba(99, 102, 241, 0.1);
+}
+
+body {
+  margin: 0;
+  font-family: 'Plus+Jakarta+Sans', sans-serif;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  color: var(--text-color);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Live Animated Background */
+.live-bg {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.orb {
+  position: absolute;
+  top: 0; left: 0;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.7;
+  will-change: transform;
+}
+.orb-1 {
+  background: var(--grad-1);
+}
+.orb-2 {
+  background: var(--grad-2);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.hero-text {
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  background: var(--hero-text-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes pulse-glow {
+  0% { transform: scale(0.95); filter: drop-shadow(0 0 0 rgba(168, 85, 247, 0)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(168, 85, 247, 0.8)); }
+  100% { transform: scale(0.95); filter: drop-shadow(0 0 0 rgba(168, 85, 247, 0)); }
+}
+
+.pulse-animation {
+  animation: pulse-glow 2.5s infinite ease-in-out;
+}
+
+/* Wooble-inspired massive heading */
+.wooble-heading {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 4.5rem;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+}
+@media (max-width: 768px) {
+  .wooble-heading {
+    font-size: 3rem;
+  }
+}
+
+.accent-badge {
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--badge-text);
+  display: inline-block;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.accent-badge:hover {
+  background: var(--badge-hover);
+}
+
+.nav-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.h-screen {
+  height: 100vh;
+}
+
+/* Loader CSS */
+.loader {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+}
+
+.loader div {
+  width: 8%;
+  height: 24%;
+  background: rgb(128, 128, 128);
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  opacity: 0;
+  border-radius: 50px;
+  box-shadow: 0 0 3px rgba(0,0,0,0.2);
+  animation: fade458 1s linear infinite;
+}
+
+@keyframes fade458 {
+  from { opacity: 1; }
+  to { opacity: 0.25; }
+}
+
+.loader .bar1 { transform: rotate(0deg) translate(0, -130%); animation-delay: 0s; }
+.loader .bar2 { transform: rotate(30deg) translate(0, -130%); animation-delay: -1.1s; }
+.loader .bar3 { transform: rotate(60deg) translate(0, -130%); animation-delay: -1s; }
+.loader .bar4 { transform: rotate(90deg) translate(0, -130%); animation-delay: -0.9s; }
+.loader .bar5 { transform: rotate(120deg) translate(0, -130%); animation-delay: -0.8s; }
+.loader .bar6 { transform: rotate(150deg) translate(0, -130%); animation-delay: -0.7s; }
+.loader .bar7 { transform: rotate(180deg) translate(0, -130%); animation-delay: -0.6s; }
+.loader .bar8 { transform: rotate(210deg) translate(0, -130%); animation-delay: -0.5s; }
+.loader .bar9 { transform: rotate(240deg) translate(0, -130%); animation-delay: -0.4s; }
+.loader .bar10 { transform: rotate(270deg) translate(0, -130%); animation-delay: -0.3s; }
+.loader .bar11 { transform: rotate(300deg) translate(0, -130%); animation-delay: -0.2s; }
+.loader .bar12 { transform: rotate(330deg) translate(0, -130%); animation-delay: -0.1s; }
+
+/* Existing utilities */
+h1, h2, h3, h4, p {
+  margin-top: 0;
+}
+
+.primary-btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+}
+
+.primary-btn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.39);
+}
+
+.primary-btn:disabled {
+  background-color: rgba(128,128,128,0.2);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.input-field {
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  color: var(--text-color);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.huge-token {
+  font-size: 6rem;
+  font-weight: 800;
+  background: -webkit-linear-gradient(45deg, #60a5fa, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 1rem 0;
+}
+
+.receptionist-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .receptionist-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.queue-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.queue-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid var(--queue-border);
+}
+.queue-item.active {
+  background-color: var(--queue-active);
+  border-left: 4px solid var(--primary-color);
+}
+
+/* Dual panel layout for patient screen */
+.patient-dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .patient-dashboard {
+    grid-template-columns: 1fr;
+    height: auto !important;
+  }
+}
+
+.patient-container {
+  width: 100vw;
+  height: 100vh;
+  padding: 2vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .patient-container {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+  }
+}

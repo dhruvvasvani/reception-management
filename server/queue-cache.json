@@ -1,0 +1,19 @@
+{
+  "activeToken": 1,
+  "nextTokenToIssue": 3,
+  "averageConsultationTime": 10,
+  "patients": [
+    {
+      "token": 1,
+      "name": "dddddddd",
+      "phone": "dddd",
+      "status": "called"
+    },
+    {
+      "token": 2,
+      "name": "dddd",
+      "phone": "wdwd",
+      "status": "waiting"
+    }
+  ]
+}
