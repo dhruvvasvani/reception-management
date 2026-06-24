@@ -174,7 +174,9 @@ function ReceptionistScreen({ data, socket }) {
   const pauseRemStr = `${String(pauseRemMin).padStart(2,'0')}:${String(pauseRemS).padStart(2,'0')}`;
 
   const activePatient   = data.patients.find(p => p.token === data.activeToken);
-  const waitingPatients = data.patients.filter(p => p.status === 'waiting' || p.status === 'called');
+  const waitingPatients = data.patients.filter(p => 
+    (p.status === 'waiting' || p.status === 'called') && p.token !== data.activeToken
+  );
   const avgSec          = data.averageConsultationTime * 60;
 
   const labelFor = (token) => formatToken(token);

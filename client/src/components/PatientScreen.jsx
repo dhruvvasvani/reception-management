@@ -58,7 +58,9 @@ function PatientScreen({ data }) {
 
   if (!data) return <div className="flex-center h-screen"><div className="loader"></div></div>;
 
-  const waitingPatients = data.patients.filter(p => p.status === 'waiting').slice(0, 4);
+  const waitingPatients = data.patients.filter(p => 
+    (p.status === 'waiting' || p.status === 'called') && p.token !== data.activeToken
+  );
   const activePatient   = data.patients.find(p => p.token === data.activeToken);
 
   let elapsedSec    = 0;
