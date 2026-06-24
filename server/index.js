@@ -95,7 +95,7 @@ io.on('connection', (socket) => {
   socket.on('call_next', () => {
     const state = getFullState();
     
-    const nextPatient = db.prepare('SELECT token FROM patients WHERE status = "waiting" ORDER BY token ASC LIMIT 1').get();
+    const nextPatient = db.prepare("SELECT token FROM patients WHERE status = 'waiting' ORDER BY token ASC LIMIT 1").get();
     
     if (nextPatient) {
       const currentToken = state.activeToken;
