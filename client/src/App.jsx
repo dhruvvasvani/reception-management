@@ -6,7 +6,9 @@ import PatientScreen from './components/PatientScreen';
 import LiveBackground from './components/LiveBackground';
 import './index.css';
 
-const socket = io('http://localhost:3001'); // Our backend URL
+const socket = io('https://reception-management.onrender.com', {
+  transports: ['websocket', 'polling']
+});
 
 function Navigation() {
   const location = useLocation();
