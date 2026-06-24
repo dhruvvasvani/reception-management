@@ -71,7 +71,7 @@ function HomeScreen() {
         </h2>
         
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '1rem' }}>
-          <a href="/patient" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+          <a href="/patient.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             <motion.button 
               whileHover={{ scale: 1.05 }} 
               whileTap={{ scale: 0.95 }}
@@ -94,7 +94,7 @@ function HomeScreen() {
             </motion.button>
           </a>
           
-          <a href="/receptionist" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+          <a href="/receptionist.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
             <motion.button 
               whileHover={{ scale: 1.05 }} 
               whileTap={{ scale: 0.95 }}
