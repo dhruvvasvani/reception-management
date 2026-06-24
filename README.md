@@ -46,7 +46,8 @@ Make sure you have Node.js (v18 or higher) installed on your system.
 
 ### 4. Open the App
 Once everything is running, open your browser:
-- Receptionist Dashboard: http://localhost:5173/receptionist
-- Patient TV Display: http://localhost:5173/patient
+- Welcome Portal: http://localhost:5173/
+- Receptionist Dashboard: http://localhost:5173/receptionist.html
+- Patient TV Display: http://localhost:5173/patient.html
 
 (Tip: You can snap them side-by-side on your monitor or cast the Patient Screen to a waiting room TV!)
