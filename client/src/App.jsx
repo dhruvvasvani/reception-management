@@ -19,7 +19,7 @@ function Navigation() {
   if (isPatientScreen || isHomeScreen) return null;
 
   return (
-    <div className="app-container" style={{paddingBottom: 0}}>
+    <div className="app-container" style={{ paddingBottom: 0 }}>
       <nav className="nav-container">
         <Link to="/receptionist" className="accent-badge">Reception Desk</Link>
         <Link to="/patient" className="accent-badge">Waiting Room TV</Link>
@@ -38,12 +38,12 @@ function ThemeManager() {
 function HomeScreen() {
   return (
     <div className="flex-center h-screen" style={{ flexDirection: 'column', position: 'relative', zIndex: 10 }}>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="glass-card"
-        style={{ 
-          padding: '4rem 3rem', 
+        style={{
+          padding: '4rem 3rem',
           textAlign: 'center',
           maxWidth: '700px',
           width: '90%',
@@ -57,23 +57,23 @@ function HomeScreen() {
         }}
       >
         <h1 className="hero-text tech-font" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', margin: 0, lineHeight: 1.1, textTransform: 'uppercase' }}>
-          Welcome Mentors of<br/>Queue Cure '26
+          Welcome Mentors of<br />Queue Cure '26
         </h1>
-        <h2 style={{ 
-          fontSize: '1.2rem', 
-          color: 'var(--text-muted)', 
-          fontWeight: '600', 
+        <h2 style={{
+          fontSize: '1.2rem',
+          color: 'var(--text-muted)',
+          fontWeight: '600',
           margin: '0 0 2rem 0',
           textTransform: 'uppercase',
           letterSpacing: '2px'
         }}>
           Demo Clinic Webapp
         </h2>
-        
+
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '1rem' }}>
           <a href="/patient.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-            <motion.button 
-              whileHover={{ scale: 1.05 }} 
+            <motion.button
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               style={{
                 padding: '1.2rem 2.5rem',
@@ -93,10 +93,10 @@ function HomeScreen() {
               Waiting Room TV
             </motion.button>
           </a>
-          
+
           <a href="/receptionist.html" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
-            <motion.button 
-              whileHover={{ scale: 1.05 }} 
+            <motion.button
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               style={{
                 padding: '1.2rem 2.5rem',
@@ -156,13 +156,13 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomeScreen />} />
-        <Route 
-          path="/receptionist" 
-          element={<div className="app-container"><ReceptionistScreen data={queueState} socket={socket} /></div>} 
+        <Route
+          path="/receptionist"
+          element={<div className="app-container"><ReceptionistScreen data={queueState} socket={socket} /></div>}
         />
-        <Route 
-          path="/patient" 
-          element={<PatientScreen data={queueState} />} 
+        <Route
+          path="/patient"
+          element={<PatientScreen data={queueState} />}
         />
       </Routes>
     </BrowserRouter>

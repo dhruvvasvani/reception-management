@@ -8,7 +8,9 @@ import LiveBackground from './components/LiveBackground';
 // Force light mode
 document.body.setAttribute('data-theme', 'light');
 
-const socket = io('http://localhost:3001');
+const socket = io('https://reception-management.onrender.com', {
+  transports: ['websocket', 'polling']
+});
 
 function ReceptionistApp() {
   const [queueState, setQueueState] = useState(null);

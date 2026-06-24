@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PAUSE_OPTIONS = [
-  { label: '1 min',  ms: 1  * 60 * 1000 },
-  { label: '5 min',  ms: 5  * 60 * 1000 },
+  { label: '1 min', ms: 1 * 60 * 1000 },
+  { label: '5 min', ms: 5 * 60 * 1000 },
   { label: '10 min', ms: 10 * 60 * 1000 },
   { label: '30 min', ms: 30 * 60 * 1000 },
   { label: '1 hour', ms: 60 * 60 * 1000 },
@@ -17,10 +17,10 @@ function formatToken(token) {
 function downloadCSV(patients, avgTime) {
   const headers = ['Token', 'Name', 'Phone', 'Status', 'Created At', 'Called At', 'Completed At', 'Waited (min)'];
   const rows = patients.map(p => {
-    const createdAt  = p.created_at  ? new Date(p.created_at).toLocaleString()  : '';
-    const calledAt   = p.called_at   ? new Date(p.called_at).toLocaleString()   : '';
+    const createdAt = p.created_at ? new Date(p.created_at).toLocaleString() : '';
+    const calledAt = p.called_at ? new Date(p.called_at).toLocaleString() : '';
     const completedAt = p.completed_at ? new Date(p.completed_at).toLocaleString() : '';
-    const waitedMin  = p.called_at && p.created_at
+    const waitedMin = p.called_at && p.created_at
       ? ((p.called_at - new Date(p.created_at).getTime()) / 60000).toFixed(1)
       : '';
     return [p.token, p.name, p.phone, p.status, createdAt, calledAt, completedAt, waitedMin];
@@ -31,9 +31,9 @@ function downloadCSV(patients, avgTime) {
     .join('\n');
 
   const blob = new Blob([csv], { type: 'text/csv' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href     = url;
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
   a.download = `queue-data-${new Date().toISOString().slice(0, 10)}.csv`;
   a.click();
   URL.revokeObjectURL(url);
@@ -42,7 +42,7 @@ function downloadCSV(patients, avgTime) {
 function getWaitStr(index, activePatient, avgSec, patients, activeToken, currentTime) {
   const EARLY_BUFFER_SEC = 2 * 60;
 
-  let activeHadEarlyCall   = false;
+  let activeHadEarlyCall = false;
   let activeEarlyBufferRem = 0;
 
   if (activePatient && activePatient.called_at) {
@@ -50,7 +50,7 @@ function getWaitStr(index, activePatient, avgSec, patients, activeToken, current
     if (prevP && prevP.called_at && prevP.completed_at) {
       if (prevP.completed_at - prevP.called_at < avgSec * 1000) {
         activeHadEarlyCall = true;
-        const bufferEndMs  = activePatient.called_at + EARLY_BUFFER_SEC * 1000;
+        const bufferEndMs = activePatient.called_at + EARLY_BUFFER_SEC * 1000;
         activeEarlyBufferRem = Math.max(0, (bufferEndMs - currentTime) / 1000);
       }
     }
@@ -90,7 +90,7 @@ function getWaitStr(index, activePatient, avgSec, patients, activeToken, current
 
   const m = Math.floor(effectiveWaitSec / 60);
   const s = Math.floor(effectiveWaitSec % 60);
-  const cd = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const cd = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 
   return {
     label: `~${cd}`,
@@ -101,13 +101,13 @@ function getWaitStr(index, activePatient, avgSec, patients, activeToken, current
 }
 
 function ReceptionistScreen({ data, socket }) {
-  const [name,        setName]        = useState('');
-  const [phone,       setPhone]       = useState('');
-  const [avgTime,     setAvgTime]     = useState(data.averageConsultationTime);
-  const [isCalling,   setIsCalling]   = useState(false);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [avgTime, setAvgTime] = useState(data.averageConsultationTime);
+  const [isCalling, setIsCalling] = useState(false);
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [showPauseMenu, setShowPauseMenu] = useState(false);
-  const nameInputRef  = useRef(null);
+  const nameInputRef = useRef(null);
 
   useEffect(() => {
     const t = setInterval(() => setCurrentTime(Date.now()), 1000);
@@ -170,14 +170,14 @@ function ReceptionistScreen({ data, socket }) {
 
   const pauseRemSec = isPaused ? Math.max(0, Math.ceil((pauseUntil - currentTime) / 1000)) : 0;
   const pauseRemMin = Math.floor(pauseRemSec / 60);
-  const pauseRemS   = pauseRemSec % 60;
-  const pauseRemStr = `${String(pauseRemMin).padStart(2,'0')}:${String(pauseRemS).padStart(2,'0')}`;
+  const pauseRemS = pauseRemSec % 60;
+  const pauseRemStr = `${String(pauseRemMin).padStart(2, '0')}:${String(pauseRemS).padStart(2, '0')}`;
 
-  const activePatient   = data.patients.find(p => p.token === data.activeToken);
-  const waitingPatients = data.patients.filter(p => 
+  const activePatient = data.patients.find(p => p.token === data.activeToken);
+  const waitingPatients = data.patients.filter(p =>
     (p.status === 'waiting' || p.status === 'called') && p.token !== data.activeToken
   );
-  const avgSec          = data.averageConsultationTime * 60;
+  const avgSec = data.averageConsultationTime * 60;
 
   const labelFor = (token) => formatToken(token);
 
@@ -436,10 +436,10 @@ function ReceptionistScreen({ data, socket }) {
             )}
           </div>
 
-          {}
+          { }
           <h3>Waiting List</h3>
 
-          {}
+          { }
           {waitingPatients.length > 0 && (
             <div style={{
               display: 'grid', gridTemplateColumns: '0.8fr 1.2fr 1fr 1fr',
@@ -461,7 +461,7 @@ function ReceptionistScreen({ data, socket }) {
                 const isActive = p.status === 'called';
 
                 const waitingOnly = waitingPatients.filter(x => x.status === 'waiting');
-                const wIdx        = waitingOnly.findIndex(x => x.token === p.token);
+                const wIdx = waitingOnly.findIndex(x => x.token === p.token);
 
                 const waitInfo = !isActive
                   ? getWaitStr(wIdx, activePatient, avgSec, data.patients, data.activeToken, currentTime)
@@ -486,12 +486,12 @@ function ReceptionistScreen({ data, socket }) {
                       listStyle: 'none'
                     }}
                   >
-                    {}
+                    { }
                     <div style={{ fontWeight: '800', color: 'var(--text-color)', fontSize: '1rem' }}>
                       {labelFor(p.token)}
                     </div>
 
-                    {}
+                    { }
                     <div>
                       <div style={{ fontWeight: '600', color: 'var(--text-color)', fontSize: '0.9rem' }}>{p.name}</div>
                       <span style={{
@@ -503,7 +503,7 @@ function ReceptionistScreen({ data, socket }) {
                       </span>
                     </div>
 
-                    {}
+                    { }
                     <div style={{ textAlign: 'center' }}>
                       {isActive ? (
                         <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: '700' }}>In Room</span>
@@ -524,7 +524,7 @@ function ReceptionistScreen({ data, socket }) {
                       ) : null}
                     </div>
 
-                    {}
+                    { }
                     <div style={{ textAlign: 'right' }}>
                       {isActive ? (
                         <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: '700' }}>—</span>

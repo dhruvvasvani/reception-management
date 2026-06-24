@@ -11,8 +11,8 @@ function PatientScreen({ data }) {
   const [isDelayed, setIsDelayed] = useState(false);
   const [showPauseOverlay, setShowPauseOverlay] = useState(false);
   const prevActiveTokenRef = useRef(data.activeToken);
-  const prevIsPausedRef    = useRef(data.isPaused);
-  const pauseOverlayTimer  = useRef(null);
+  const prevIsPausedRef = useRef(data.isPaused);
+  const pauseOverlayTimer = useRef(null);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -58,14 +58,14 @@ function PatientScreen({ data }) {
 
   if (!data) return <div className="flex-center h-screen"><div className="loader"></div></div>;
 
-  const waitingPatients = data.patients.filter(p => 
+  const waitingPatients = data.patients.filter(p =>
     (p.status === 'waiting' || p.status === 'called') && p.token !== data.activeToken
   );
-  const activePatient   = data.patients.find(p => p.token === data.activeToken);
+  const activePatient = data.patients.find(p => p.token === data.activeToken);
 
-  let elapsedSec    = 0;
+  let elapsedSec = 0;
   let stopwatchText = '';
-  let inTimeStr     = '';
+  let inTimeStr = '';
 
   if (activePatient && activePatient.called_at) {
     elapsedSec = Math.floor((currentTime.getTime() - activePatient.called_at) / 1000);
@@ -91,21 +91,21 @@ function PatientScreen({ data }) {
   }, [currentTime, activePatient, data.averageConsultationTime]);
 
   const EARLY_BUFFER_MS = 2 * 60 * 1000; // 2 minutes
-  let isInEarlyBuffer   = false;
-  let earlyBufferStr    = '';
+  let isInEarlyBuffer = false;
+  let earlyBufferStr = '';
   let earlyBufferRemSec = 0;
 
   if (activePatient && activePatient.called_at) {
     const prevPatient = data.patients.find(p => p.token === data.activeToken - 1);
     if (prevPatient && prevPatient.called_at && prevPatient.completed_at) {
       const prevServedMs = prevPatient.completed_at - prevPatient.called_at;
-      const avgMs        = data.averageConsultationTime * 60 * 1000;
+      const avgMs = data.averageConsultationTime * 60 * 1000;
       if (prevServedMs < avgMs) {
 
         const bufferEndMs = activePatient.called_at + EARLY_BUFFER_MS;
-        const remMs       = bufferEndMs - currentTime.getTime();
+        const remMs = bufferEndMs - currentTime.getTime();
         if (remMs > 0) {
-          isInEarlyBuffer   = true;
+          isInEarlyBuffer = true;
           earlyBufferRemSec = remMs / 1000;
           const m = Math.floor(earlyBufferRemSec / 60);
           const s = Math.floor(earlyBufferRemSec % 60);
@@ -123,10 +123,10 @@ function PatientScreen({ data }) {
   });
 
   const getWaitInfo = (index) => {
-    const avgSec          = data.averageConsultationTime * 60;
+    const avgSec = data.averageConsultationTime * 60;
     const EARLY_BUFFER_SEC = 2 * 60;
 
-    let activeHadEarlyCall   = false;
+    let activeHadEarlyCall = false;
     let activeEarlyBufferRem = 0; // seconds left in the buffer right now (0 when done)
 
     if (activePatient && activePatient.called_at) {
@@ -134,7 +134,7 @@ function PatientScreen({ data }) {
       if (prevP && prevP.called_at && prevP.completed_at) {
         if (prevP.completed_at - prevP.called_at < data.averageConsultationTime * 60 * 1000) {
           activeHadEarlyCall = true;
-          const bufferEndMs  = activePatient.called_at + EARLY_BUFFER_SEC * 1000;
+          const bufferEndMs = activePatient.called_at + EARLY_BUFFER_SEC * 1000;
           activeEarlyBufferRem = Math.max(0, (bufferEndMs - currentTime.getTime()) / 1000);
         }
       }
@@ -179,7 +179,7 @@ function PatientScreen({ data }) {
 
     const effectiveWaitSec = isEarly ? Math.max(EARLY_BUFFER_SEC, totalWaitSec) : totalWaitSec;
 
-    const callDate    = new Date(currentTime.getTime() + effectiveWaitSec * 1000);
+    const callDate = new Date(currentTime.getTime() + effectiveWaitSec * 1000);
     const callTimeStr = callDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
 
     const cdMin = Math.floor(effectiveWaitSec / 60);
@@ -197,7 +197,7 @@ function PatientScreen({ data }) {
     };
   };
 
-  const pauseRemMs  = data.isPaused && data.pauseUntil ? Math.max(0, data.pauseUntil - currentTime.getTime()) : 0;
+  const pauseRemMs = data.isPaused && data.pauseUntil ? Math.max(0, data.pauseUntil - currentTime.getTime()) : 0;
   const pauseRemMin = Math.ceil(pauseRemMs / 60000);
 
   return (
@@ -207,7 +207,7 @@ function PatientScreen({ data }) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0 }}
     >
-      {}
+      { }
       <AnimatePresence>
         {showPauseOverlay && (
           <motion.div
@@ -224,7 +224,7 @@ function PatientScreen({ data }) {
               textAlign: 'center', padding: '2rem'
             }}
           >
-            {}
+            { }
             <motion.div
               animate={{ scale: [1, 1.12, 1] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
@@ -266,7 +266,7 @@ function PatientScreen({ data }) {
               <strong style={{ color: '#f97316' }}>{pauseRemMin} min{pauseRemMin !== 1 ? 's' : ''}</strong>.
             </motion.p>
 
-            {}
+            { }
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
               style={{ width: 'min(420px, 80vw)' }}
@@ -296,7 +296,7 @@ function PatientScreen({ data }) {
         </div>
       </div>
 
-      {}
+      { }
       <AnimatePresence>
         {data.isPaused && !showPauseOverlay && (
           <motion.div
@@ -327,7 +327,7 @@ function PatientScreen({ data }) {
 
       <div className="patient-dashboard" style={{ flex: 1, minHeight: 0, height: '100%', gap: '2vw' }}>
 
-        {}
+        { }
         <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100%', padding: '2vw', position: 'relative' }}>
           <AnimatePresence mode="wait">
             {data.activeToken > 0 ? (
@@ -367,7 +367,7 @@ function PatientScreen({ data }) {
 
           <AnimatePresence mode="wait">
             {data.activeToken > 0 && isInEarlyBuffer ? (
-              
+
               <motion.div
                 key={`early-${data.activeToken}`}
                 initial={{ opacity: 0, y: 20 }}
@@ -375,7 +375,7 @@ function PatientScreen({ data }) {
                 exit={{ opacity: 0, y: -20 }}
                 style={{ textAlign: 'center', width: '100%' }}
               >
-                {}
+                { }
                 <motion.div
                   animate={{ scale: [1, 1.04, 1] }}
                   transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
@@ -400,7 +400,7 @@ function PatientScreen({ data }) {
                   Your consultation room will be ready in:
                 </p>
 
-                {}
+                { }
                 <motion.div
                   key={earlyBufferStr}
                   initial={{ opacity: 0.7, scale: 0.97 }}
@@ -423,7 +423,7 @@ function PatientScreen({ data }) {
               </motion.div>
 
             ) : data.activeToken > 0 ? (
-              
+
               <motion.div
                 key={`serving-${data.activeToken}`}
                 initial={{ opacity: 0, y: 20 }}
@@ -460,22 +460,22 @@ function PatientScreen({ data }) {
           </AnimatePresence>
         </div>
 
-        {}
+        { }
         <div style={{ display: 'flex', flexDirection: 'column', gap: '2vh', height: '100%', minHeight: 0 }}>
 
-          {}
+          { }
           <div className="glass-card" style={{ padding: '1.5vh', textAlign: 'center', flexShrink: 0 }}>
             <div style={{ fontSize: 'clamp(2rem, 3vw, 3.5rem)', fontWeight: '800', color: 'var(--text-color)', fontFamily: 'monospace', letterSpacing: '-1px', lineHeight: 1 }}>{timeStr}</div>
             <div style={{ fontSize: 'clamp(1rem, 1.2vw, 1.5rem)', color: 'var(--text-muted)', fontWeight: '600', marginTop: '0.5vh' }}>{dateStr}</div>
           </div>
 
-          {}
+          { }
           <div className="glass-card" style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '2vh 2vw', minHeight: 0 }}>
             <h3 style={{ marginBottom: '1vh', borderBottom: '1px solid var(--queue-border)', paddingBottom: '1vh', fontSize: 'clamp(1.2rem, 1.8vw, 2rem)' }}>Next Up</h3>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1vh', flex: 1, justifyContent: 'space-evenly' }}>
 
-              {}
+              { }
               {waitingPatients.length > 0 && (
                 <div style={{ display: 'grid', gridTemplateColumns: '0.7fr 1.5fr 1fr 1fr', padding: '0 0.8vw', color: 'var(--text-muted)', fontSize: 'clamp(0.65rem, 0.85vw, 1rem)', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
                   <div>Token</div>
@@ -485,11 +485,11 @@ function PatientScreen({ data }) {
                 </div>
               )}
 
-              {}
+              { }
               {waitingPatients.length > 0 ? waitingPatients.map((p, index) => {
                 const info = getWaitInfo(index);
-                const isLateKind  = info.kind === 'late';
-                const isNextKind  = info.kind === 'next';
+                const isLateKind = info.kind === 'late';
+                const isNextKind = info.kind === 'next';
                 const isEarlyKind = info.kind === 'early';
 
                 const borderColor = isLateKind
@@ -518,17 +518,17 @@ function PatientScreen({ data }) {
                         : '0 4px 15px rgba(0,0,0,0.04)'
                     }}
                   >
-                    {}
+                    { }
                     <div style={{ fontSize: 'clamp(1.4rem, 2.2vw, 2.6rem)', fontWeight: '900', color: 'var(--text-color)', lineHeight: 1 }}>
                       {formatToken(p.token)}
                     </div>
 
-                    {}
+                    { }
                     <div style={{ fontSize: 'clamp(0.95rem, 1.5vw, 1.7rem)', color: 'var(--text-muted)', fontWeight: '600', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {p.name}
                     </div>
 
-                    {}
+                    { }
                     <div style={{ textAlign: 'center' }}>
                       {isLateKind ? (
                         <span style={{ fontSize: 'clamp(0.75rem, 1vw, 1.1rem)', color: '#10b981', fontWeight: '700', lineHeight: 1.3 }}>
@@ -539,7 +539,7 @@ function PatientScreen({ data }) {
                           NEXT
                         </span>
                       ) : isEarlyKind ? (
-                        
+
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.15vh' }}>
                           <span style={{
                             fontSize: 'clamp(0.55rem, 0.75vw, 0.85rem)',
@@ -575,14 +575,14 @@ function PatientScreen({ data }) {
                       )}
                     </div>
 
-                    {}
+                    { }
                     <div style={{ textAlign: 'right' }}>
                       {isLateKind ? (
                         <span style={{ fontSize: 'clamp(0.75rem, 1vw, 1.1rem)', color: '#10b981', fontWeight: '700', lineHeight: 1.3 }}>
                           Wait a<br />few more min
                         </span>
                       ) : isNextKind ? null : isEarlyKind ? (
-                        
+
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.15vh' }}>
                           <span style={{
                             fontSize: 'clamp(0.55rem, 0.72vw, 0.82rem)',
