@@ -85,8 +85,8 @@ io.on('connection', (socket) => {
     const last = db.prepare('SELECT MAX(token) as maxToken FROM patients').get();
     const nextToken = (last && last.maxToken) ? last.maxToken + 1 : 1;
 
-    const stmt = db.prepare('INSERT INTO patients (token, name, phone, status, timestamp) VALUES (?, ?, ?, ?, ?)');
-    stmt.run(nextToken, data.name, data.phone, 'waiting', Date.now());
+    const stmt = db.prepare('INSERT INTO patients (token, name, phone, status) VALUES (?, ?, ?, ?)');
+    stmt.run(nextToken, data.name, data.phone, 'waiting');
     
     io.emit('queue_updated', getFullState());
     console.log(`Added patient: Token #${nextToken}`);
