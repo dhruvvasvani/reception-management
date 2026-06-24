@@ -1,24 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const TOKEN_MODES = [
-  { id: 'hash',   label: '#1–#100',  format: (n) => n > 0 ? `#${((n - 1) % 100) + 1}` : '#0' },
-  { id: 'plain',  label: '1–100',    format: (n) => n > 0 ? `${((n - 1) % 100) + 1}` : '0' },
-  { id: 'alpha',  label: 'A–Z',      format: (n) => {
-    let result = '';
-    let num = n;
-    while (num > 0) {
-      num--;
-      result = String.fromCharCode(65 + (num % 26)) + result;
-      num = Math.floor(num / 26);
-    }
-    return result;
-  }},
-];
-
-function formatToken(token, modeId) {
-  const mode = TOKEN_MODES.find(m => m.id === modeId) || TOKEN_MODES[0];
-  return mode.format(token);
+function formatToken(token) {
+  if (!token || token <= 0) return '#0';
+  return `#${((token - 1) % 50) + 1}`;
 }
 
 function PatientScreen({ data }) {
@@ -34,14 +19,12 @@ function PatientScreen({ data }) {
     return () => clearInterval(timer);
   }, []);
 
-  const announceToken = (token, mode) => {
+  const announceToken = (token) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
-      let spokenToken = formatToken(token, mode);
-
-      let prefix = mode === 'hash' ? 'Token number' : 'Token';
+      let spokenToken = formatToken(token);
       const utterance = new SpeechSynthesisUtterance(
-        `${prefix} ${spokenToken.replace('#', '')}, please proceed to the consultation room.`
+        `Token number ${spokenToken.replace('#', '')}, please proceed to the consultation room.`
       );
       utterance.rate = 0.9;
       utterance.pitch = 1;
@@ -52,9 +35,9 @@ function PatientScreen({ data }) {
   useEffect(() => {
     if (data.activeToken > 0 && data.activeToken !== prevActiveTokenRef.current) {
       prevActiveTokenRef.current = data.activeToken;
-      announceToken(data.activeToken, data.tokenMode);
+      announceToken(data.activeToken);
     }
-  }, [data.activeToken, data.tokenMode]);
+  }, [data.activeToken]);
 
   useEffect(() => {
     if (data.isPaused && !prevIsPausedRef.current) {
@@ -357,7 +340,7 @@ function PatientScreen({ data }) {
                   className="hero-text pulse-animation"
                   style={{ fontSize: 'clamp(8rem, 15vw, 18rem)', margin: '2vh 0', lineHeight: 1 }}
                 >
-                  {formatToken(data.activeToken, data.tokenMode)}
+                  {formatToken(data.activeToken)}
                 </motion.div>
               </>
             ) : (
@@ -413,7 +396,7 @@ function PatientScreen({ data }) {
                 </motion.div>
 
                 <p style={{ fontSize: 'clamp(1rem, 1.5vw, 2rem)', color: 'var(--text-muted)', margin: '0 0 0.5vh 0', fontWeight: '600' }}>
-                  Token <strong style={{ color: 'var(--text-color)' }}>{formatToken(data.activeToken, data.tokenMode)}</strong>, please wait —
+                  Token <strong style={{ color: 'var(--text-color)' }}>{formatToken(data.activeToken)}</strong>, please wait —
                 </p>
                 <p style={{ fontSize: 'clamp(0.9rem, 1.2vw, 1.5rem)', color: 'var(--text-muted)', margin: '0 0 2vh 0' }}>
                   Your consultation room will be ready in:
@@ -539,7 +522,7 @@ function PatientScreen({ data }) {
                   >
                     {}
                     <div style={{ fontSize: 'clamp(1.4rem, 2.2vw, 2.6rem)', fontWeight: '900', color: 'var(--text-color)', lineHeight: 1 }}>
-                      {formatToken(p.token, data.tokenMode)}
+                      {formatToken(p.token)}
                     </div>
 
                     {}

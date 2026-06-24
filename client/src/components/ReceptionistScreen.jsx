@@ -9,25 +9,9 @@ const PAUSE_OPTIONS = [
   { label: '1 hour', ms: 60 * 60 * 1000 },
 ];
 
-const TOKEN_MODES = [
-  { id: 'hash',   label: '#1–#100',  format: (n) => n > 0 ? `#${((n - 1) % 100) + 1}` : '#0' },
-  { id: 'plain',  label: '1–100',    format: (n) => n > 0 ? `${((n - 1) % 100) + 1}` : '0' },
-  { id: 'alpha',  label: 'A–Z',      format: (n) => {
-
-    let result = '';
-    let num = n;
-    while (num > 0) {
-      num--;
-      result = String.fromCharCode(65 + (num % 26)) + result;
-      num = Math.floor(num / 26);
-    }
-    return result;
-  }},
-];
-
-function formatToken(token, modeId) {
-  const mode = TOKEN_MODES.find(m => m.id === modeId) || TOKEN_MODES[0];
-  return mode.format(token);
+function formatToken(token) {
+  if (!token || token <= 0) return '#0';
+  return `#${((token - 1) % 50) + 1}`;
 }
 
 function downloadCSV(patients, avgTime) {
@@ -121,12 +105,9 @@ function ReceptionistScreen({ data, socket }) {
   const [phone,       setPhone]       = useState('');
   const [avgTime,     setAvgTime]     = useState(data.averageConsultationTime);
   const [isCalling,   setIsCalling]   = useState(false);
-  const [showModes,   setShowModes]   = useState(false);
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [showPauseMenu, setShowPauseMenu] = useState(false);
   const nameInputRef  = useRef(null);
-  
-  const tokenMode = data.tokenMode || 'hash';
 
   useEffect(() => {
     const t = setInterval(() => setCurrentTime(Date.now()), 1000);
@@ -196,7 +177,7 @@ function ReceptionistScreen({ data, socket }) {
   const waitingPatients = data.patients.filter(p => p.status === 'waiting' || p.status === 'called');
   const avgSec          = data.averageConsultationTime * 60;
 
-  const labelFor = (token) => formatToken(token, tokenMode);
+  const labelFor = (token) => formatToken(token);
 
   return (
     <motion.div
@@ -205,7 +186,6 @@ function ReceptionistScreen({ data, socket }) {
       exit={{ opacity: 0, y: -20 }}
       className="glass-card"
     >
-      {}
       <div style={{ marginBottom: '2rem', borderBottom: '1px solid var(--queue-border)', paddingBottom: '1rem', textAlign: 'center' }}>
         <h2 className="hero-text" style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Demo Clinic Reception</h2>
         <div className="accent-badge" style={{ marginTop: '0.5rem' }}>Dr. Rahul Sharma - MBBS, MD Cardiology</div>
@@ -213,9 +193,7 @@ function ReceptionistScreen({ data, socket }) {
 
       <div className="receptionist-grid">
 
-        {}
         <div>
-          {}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h3>Add New Patient</h3>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'var(--input-bg)', padding: '0.2rem 0.5rem', borderRadius: '4px', fontFamily: 'monospace' }}>Ctrl + N</span>
@@ -255,7 +233,6 @@ function ReceptionistScreen({ data, socket }) {
             </motion.button>
           </form>
 
-          {}
           <div style={{ marginTop: '2rem' }}>
             <div className="glass-card" style={{ padding: '1.5rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -275,69 +252,8 @@ function ReceptionistScreen({ data, socket }) {
             </div>
           </div>
 
-          {}
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
 
-            {}
-            <div style={{ position: 'relative', flex: 1 }}>
-              <motion.button
-                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                onClick={() => setShowModes(v => !v)}
-                style={{
-                  width: '100%', padding: '0.6rem 1rem',
-                  background: 'var(--input-bg)', border: '1px solid var(--queue-border)',
-                  borderRadius: '8px', cursor: 'pointer', color: 'var(--text-color)',
-                  fontWeight: '600', fontSize: '0.875rem',
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem'
-                }}
-              >
-                <span>🔢 Token: {TOKEN_MODES.find(m => m.id === tokenMode)?.label}</span>
-                <span style={{ fontSize: '0.6rem', color: 'var(--text-muted)' }}>{showModes ? '▲' : '▼'}</span>
-              </motion.button>
-
-              <AnimatePresence>
-                {showModes && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
-                    style={{
-                      position: 'absolute', top: 'calc(100% + 4px)', left: 0, right: 0, zIndex: 9999,
-                      background: 'var(--bg-color)', border: '1px solid var(--queue-border)',
-                      borderRadius: '8px', overflow: 'hidden',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.5)'
-                    }}
-                  >
-                    {TOKEN_MODES.map(mode => (
-                      <button
-                        key={mode.id}
-                        onClick={() => { 
-                          if (mode.id !== tokenMode) {
-                            if (window.confirm(`Changing the token format to "${mode.label}" will clear all current queue data and restart the sequence. Are you sure?`)) {
-                              socket.emit('update_token_mode', mode.id);
-                            }
-                          }
-                          setShowModes(false); 
-                        }}
-                        style={{
-                          display: 'block', width: '100%', padding: '0.6rem 1rem',
-                          textAlign: 'left', border: 'none', cursor: 'pointer',
-                          background: tokenMode === mode.id ? 'rgba(99,102,241,0.12)' : 'transparent',
-                          color: tokenMode === mode.id ? 'var(--primary-color)' : 'var(--text-color)',
-                          fontWeight: tokenMode === mode.id ? '700' : '500',
-                          fontSize: '0.875rem'
-                        }}
-                      >
-                        {mode.label}
-                        <span style={{ marginLeft: '0.5rem', color: 'var(--text-muted)', fontSize: '0.75rem' }}>
-                          (e.g. {mode.format(1)}, {mode.format(2)}, {mode.format(3)}…)
-                        </span>
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {}
             <motion.button
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               onClick={() => downloadCSV(data.patients, data.averageConsultationTime)}
