@@ -189,7 +189,7 @@ function ReceptionistScreen({ data, socket }) {
       className="glass-card"
     >
       <div style={{ marginBottom: '2rem', borderBottom: '1px solid var(--queue-border)', paddingBottom: '1rem', textAlign: 'center' }}>
-        <h2 className="hero-text" style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Demo Clinic Reception</h2>
+        <h2 className="hero-text tech-font" style={{ fontSize: '2.5rem', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Demo Clinic Reception</h2>
         <div className="accent-badge" style={{ marginTop: '0.5rem' }}>Dr. Rahul Sharma - MBBS, MD Cardiology</div>
       </div>
 
@@ -271,7 +271,6 @@ function ReceptionistScreen({ data, socket }) {
               ⬇ CSV
             </motion.button>
 
-            {}
             <motion.button
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               onClick={handleClearData}
@@ -289,11 +288,9 @@ function ReceptionistScreen({ data, socket }) {
           </div>
         </div>
 
-        {}
         <div>
           <h3>Queue Control</h3>
 
-          {}
           <div style={{ marginBottom: '1.5rem', position: 'relative' }}>
             <AnimatePresence mode="wait">
               {isPaused ? (
@@ -401,8 +398,10 @@ function ReceptionistScreen({ data, socket }) {
             <AnimatePresence mode="wait">
               <motion.div
                 key={data.activeToken}
-                initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}
-                className="hero-text" style={{ fontSize: '4rem', margin: '0.5rem 0' }}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.2 }}
+                className="hero-text tech-font" style={{ fontSize: '5rem', margin: '0.5rem 0' }}
               >
                 {data.activeToken > 0 ? labelFor(data.activeToken) : 'None'}
               </motion.div>

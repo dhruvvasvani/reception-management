@@ -288,7 +288,7 @@ function PatientScreen({ data }) {
       </AnimatePresence>
 
       <div style={{ textAlign: 'center', marginBottom: '2vh' }}>
-        <h2 className="hero-text" style={{ fontSize: 'clamp(2rem, 3vw, 4rem)', marginBottom: '0.5vh' }}>
+        <h2 className="hero-text tech-font" style={{ fontSize: 'clamp(2rem, 3vw, 4.5rem)', marginBottom: '0.5vh', textTransform: 'uppercase' }}>
           Demo Clinic Waiting Room
         </h2>
         <div className="accent-badge" style={{ fontSize: 'clamp(0.8rem, 1vw, 1.2rem)' }}>
@@ -334,13 +334,9 @@ function PatientScreen({ data }) {
               <>
                 <h2 style={{ color: 'var(--text-muted)', fontSize: 'clamp(1.5rem, 2vw, 2.5rem)', margin: 0 }}>Now Serving</h2>
                 <motion.div
-                  key={data.activeToken}
-                  initial={{ scale: 0.5, opacity: 0, y: 50 }}
-                  animate={{ scale: 1, opacity: 1, y: 0 }}
-                  exit={{ scale: 0.5, opacity: 0, y: -50 }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                  className="hero-text pulse-animation"
-                  style={{ fontSize: 'clamp(8rem, 15vw, 18rem)', margin: '2vh 0', lineHeight: 1 }}
+                  initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.2 }}
+                  className="hero-text tech-font"
+                  style={{ fontSize: 'clamp(6rem, 12vw, 15rem)', margin: '1vh 0', lineHeight: 1 }}
                 >
                   {formatToken(data.activeToken)}
                 </motion.div>
@@ -410,7 +406,7 @@ function PatientScreen({ data }) {
                   initial={{ opacity: 0.7, scale: 0.97 }}
                   animate={{ opacity: 1, scale: 1 }}
                   style={{
-                    fontSize: 'clamp(4rem, 8vw, 9rem)',
+                    fontSize: 'clamp(3.5rem, 6vw, 7rem)',
                     fontWeight: '900',
                     fontFamily: 'monospace',
                     color: '#10b981',

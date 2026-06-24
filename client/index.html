@@ -4,47 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Queue Cure '26</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body {
-        font-family: 'Segoe UI', system-ui, sans-serif;
-        background: #f8fafc;
-        display: flex; justify-content: center; align-items: center;
-        min-height: 100vh;
-      }
-      .card {
-        text-align: center;
-        padding: 3rem 4rem;
-        background: white;
-        border-radius: 24px;
-        box-shadow: 0 20px 60px rgba(0,0,0,0.08);
-        border: 1px solid rgba(0,0,0,0.06);
-      }
-      h1 { font-size: 2.2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem; }
-      p { color: #64748b; margin-bottom: 2rem; font-size: 1rem; }
-      .btns { display: flex; gap: 1rem; justify-content: center; }
-      a {
-        display: inline-block;
-        padding: 0.85rem 2rem;
-        border-radius: 12px;
-        font-weight: 700;
-        font-size: 1rem;
-        text-decoration: none;
-        transition: transform 0.15s, box-shadow 0.15s;
-      }
-      a:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
-      .patient { background: #6366f1; color: white; }
-      .recept  { background: #10b981; color: white; }
-    </style>
+
   </head>
   <body>
-    <div class="card">
-      <h1>Queue Cure '26</h1>
-      <p>Select a screen to open</p>
-      <div class="btns">
-        <a class="patient" href="/patient.html" target="_blank">Waiting Room TV</a>
-        <a class="recept"  href="/receptionist.html" target="_blank">Reception Desk</a>
-      </div>
-    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
