@@ -1,5 +1,8 @@
 # Queue Cure '26
 
+<div align="center">
+  <img src="./assets/cover.png" alt="Queue Cure '26 Cover Image" width="100%" />
+</div>
 Welcome to Queue Cure '26 - a beautifully designed, real-time digital queue management system. We built this to say goodbye to messy paper tokens and crowded, chaotic waiting rooms. It features a powerful Receptionist Dashboard to manage the flow of patients, paired with a stunning, animated Patient Display that keeps everyone informed and relaxed.
 
 ## Tech Stack
