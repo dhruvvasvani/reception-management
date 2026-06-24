@@ -82,18 +82,24 @@ io.on('connection', (socket) => {
   socket.emit('queue_updated', getFullState());
 
   socket.on('add_patient', (data) => {
-    const stmt = db.prepare('INSERT INTO patients (name, phone, status) VALUES (?, ?, ?)');
-    const info = stmt.run(data.name, data.phone, 'waiting');
+    const last = db.prepare('SELECT MAX(token) as maxToken FROM patients').get();
+    const nextToken = (last && last.maxToken) ? last.maxToken + 1 : 1;
+
+    const stmt = db.prepare('INSERT INTO patients (token, name, phone, status, timestamp) VALUES (?, ?, ?, ?, ?)');
+    stmt.run(nextToken, data.name, data.phone, 'waiting', Date.now());
     
     io.emit('queue_updated', getFullState());
-    console.log(`Added patient: Token #${info.lastInsertRowid}`);
+    console.log(`Added patient: Token #${nextToken}`);
   });
 
   socket.on('call_next', () => {
     const state = getFullState();
-    if (state.activeToken < state.nextTokenToIssue - 1) {
+    
+    const nextPatient = db.prepare('SELECT token FROM patients WHERE status = "waiting" ORDER BY token ASC LIMIT 1').get();
+    
+    if (nextPatient) {
       const currentToken = state.activeToken;
-      const nextToken = currentToken + 1;
+      const nextToken = nextPatient.token;
       
       const updatePatientCalled = db.prepare('UPDATE patients SET status = ?, called_at = ? WHERE token = ?');
       const updatePatientComplete = db.prepare('UPDATE patients SET status = ?, completed_at = ? WHERE token = ?');
