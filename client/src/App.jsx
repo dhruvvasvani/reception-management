@@ -176,6 +176,9 @@ function App() {
         {/* Legacy redirects for old URLs to prevent 404s */}
         <Route path="/patient" element={<Navigate to="/" replace />} />
         <Route path="/receptionist" element={<Navigate to="/dashboard" replace />} />
+        
+        {/* Catch-all route to prevent blank screens on invalid URLs */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
