@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { QRCodeCanvas } from 'qrcode.react';
+import { Share2, X, Mail, MessageSquare } from 'lucide-react';
 
 const PAUSE_OPTIONS = [
   { label: '1 min', ms: 1 * 60 * 1000 },
@@ -100,13 +102,14 @@ function getWaitStr(index, activePatient, avgSec, patients, activeToken, current
   };
 }
 
-function ReceptionistScreen({ data, socket }) {
+function ReceptionistScreen({ data, socket, clinicId, isDemo }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [avgTime, setAvgTime] = useState(data.averageConsultationTime);
   const [isCalling, setIsCalling] = useState(false);
   const [currentTime, setCurrentTime] = useState(Date.now());
   const [showPauseMenu, setShowPauseMenu] = useState(false);
+  const [sharePatient, setSharePatient] = useState(null);
   const nameInputRef = useRef(null);
 
   useEffect(() => {
@@ -442,7 +445,7 @@ function ReceptionistScreen({ data, socket }) {
           { }
           {waitingPatients.length > 0 && (
             <div style={{
-              display: 'grid', gridTemplateColumns: '0.8fr 1.2fr 1fr 1fr',
+              display: 'grid', gridTemplateColumns: '0.8fr 1.2fr 1fr 1fr 0.5fr',
               padding: '0.3rem 0.75rem',
               fontSize: '0.68rem', fontWeight: '700', letterSpacing: '1px',
               textTransform: 'uppercase', color: 'var(--text-muted)'
@@ -451,6 +454,7 @@ function ReceptionistScreen({ data, socket }) {
               <div>Patient</div>
               <div style={{ textAlign: 'center' }}>Est. Call</div>
               <div style={{ textAlign: 'right' }}>Wait</div>
+              <div style={{ textAlign: 'center' }}>Share</div>
             </div>
           )}
 
@@ -474,7 +478,7 @@ function ReceptionistScreen({ data, socket }) {
                     layout
                     style={{
                       display: 'grid',
-                      gridTemplateColumns: '0.8fr 1.2fr 1fr 1fr',
+                      gridTemplateColumns: '0.8fr 1.2fr 1fr 1fr 0.5fr',
                       alignItems: 'center',
                       padding: '0.6rem 0.75rem',
                       borderRadius: '10px',
@@ -524,7 +528,7 @@ function ReceptionistScreen({ data, socket }) {
                       ) : null}
                     </div>
 
-                    { }
+                    {/* Wait Column */}
                     <div style={{ textAlign: 'right' }}>
                       {isActive ? (
                         <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: '700' }}>—</span>
@@ -537,6 +541,21 @@ function ReceptionistScreen({ data, socket }) {
                           {waitInfo.label}
                         </span>
                       ) : null}
+                    </div>
+
+                    {/* Share Column */}
+                    <div style={{ textAlign: 'center' }}>
+                      <button 
+                        onClick={() => setSharePatient(p)}
+                        style={{
+                          background: 'rgba(14, 165, 233, 0.1)', border: 'none', borderRadius: '8px',
+                          color: 'var(--primary-color)', padding: '0.4rem', cursor: 'pointer',
+                          display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
+                        }}
+                        title="Share Tracker Link"
+                      >
+                        <Share2 size={16} />
+                      </button>
                     </div>
                   </motion.li>
                 );
@@ -554,6 +573,73 @@ function ReceptionistScreen({ data, socket }) {
           </ul>
         </div>
       </div>
+
+      <AnimatePresence>
+        {sharePatient && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+              background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
+              zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}
+            onClick={() => setSharePatient(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+              style={{
+                background: 'var(--bg-color)', padding: '2rem', borderRadius: '24px',
+                width: '90%', maxWidth: '400px', border: '1px solid var(--glass-border)',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+              }}
+              onClick={e => e.stopPropagation()}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                <h3 style={{ margin: 0 }}>Share with {sharePatient.name}</h3>
+                <button onClick={() => setSharePatient(null)} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
+                  <X size={24} />
+                </button>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2rem', background: 'white', padding: '1rem', borderRadius: '12px' }}>
+                <QRCodeCanvas 
+                  value={`${window.location.origin}/patient/${clinicId || 'demo'}?token=${sharePatient.token}`} 
+                  size={200} 
+                  level="H" 
+                  fgColor="#0f172a" 
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                <a 
+                  href={`https://wa.me/${sharePatient.phone}?text=${encodeURIComponent(`Hello ${sharePatient.name}, track your live wait time at our clinic here: ${window.location.origin}/patient/${clinicId || 'demo'}?token=${sharePatient.token}`)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="primary-gradient-btn"
+                  style={{ justifyContent: 'center', textDecoration: 'none', background: 'linear-gradient(135deg, #25D366, #128C7E)' }}
+                >
+                  <MessageSquare size={18} /> Share via WhatsApp
+                </a>
+                
+                <a 
+                  href={`sms:${sharePatient.phone}?body=${encodeURIComponent(`Hello ${sharePatient.name}, track your wait time: ${window.location.origin}/patient/${clinicId || 'demo'}?token=${sharePatient.token}`)}`}
+                  className="primary-gradient-btn"
+                  style={{ justifyContent: 'center', textDecoration: 'none', background: 'linear-gradient(135deg, #3b82f6, #2563eb)' }}
+                >
+                  <MessageSquare size={18} /> Send SMS
+                </a>
+
+                <a 
+                  href={`mailto:?subject=Your Queue Tracker Link&body=${encodeURIComponent(`Hello ${sharePatient.name},\n\nYou can track your live wait time here:\n${window.location.origin}/patient/${clinicId || 'demo'}?token=${sharePatient.token}`)}`}
+                  className="primary-gradient-btn"
+                  style={{ justifyContent: 'center', textDecoration: 'none', background: 'linear-gradient(135deg, #ef4444, #dc2626)' }}
+                >
+                  <Mail size={18} /> Email Link
+                </a>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
