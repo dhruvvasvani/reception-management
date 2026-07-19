@@ -11,7 +11,7 @@ import DemoWorkspace from './components/DemoWorkspace';
 import DemoIsolatedView from './components/DemoIsolatedView';
 import './index.css';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = import.meta.env.PROD ? 'https://reception-management.onrender.com' : 'http://localhost:3001';
 
 function ThemeManager() {
   useEffect(() => {

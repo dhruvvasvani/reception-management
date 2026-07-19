@@ -5,7 +5,7 @@ import ReceptionistScreen from './ReceptionistScreen';
 import LiveDisplayScreen from './LiveDisplayScreen';
 import PatientScreen from './PatientScreen';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = import.meta.env.PROD ? 'https://reception-management.onrender.com' : 'http://localhost:3001';
 
 export default function DemoIsolatedView({ view }) {
   const { clinic_id } = useParams();

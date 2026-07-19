@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Monitor, Smartphone, Users, ExternalLink } from 'lucide-react';
 
-const BASE_URL = 'http://localhost:3001';
+const BASE_URL = import.meta.env.PROD ? 'https://reception-management.onrender.com' : 'http://localhost:3001';
 
 export default function DemoWorkspace() {
   const { clinic_id } = useParams();

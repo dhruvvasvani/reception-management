@@ -21,7 +21,7 @@ export default function AuthPage({ setAuthToken, setClinicData }) {
     setLoading(true);
 
     const endpoint = isLogin ? '/api/login' : '/api/register';
-    const baseUrl = 'http://localhost:3001'; // Development URL, should be env var in prod
+    const baseUrl = import.meta.env.PROD ? 'https://reception-management.onrender.com' : 'http://localhost:3001';
 
     try {
       const res = await fetch(`${baseUrl}${endpoint}`, {
